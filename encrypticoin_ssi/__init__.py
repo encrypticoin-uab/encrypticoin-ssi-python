@@ -7,4 +7,4 @@ encrypticoin-ssi
 
 __copyright__ = "Copyright 2022 Encrypticoin UAB"
 __credits__ = ["Nándor Mátravölgyi", "László Tajti"]
-__version__ = "0.1.1"
+__version__ = "0.1.2"
