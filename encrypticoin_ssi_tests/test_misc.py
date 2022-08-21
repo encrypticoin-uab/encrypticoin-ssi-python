@@ -1,7 +1,10 @@
 from decimal import Decimal
 
+import pytest
+
 from encrypticoin_ssi.balance import TokenBalance
 from encrypticoin_ssi.balance_change import TokenBalanceChange
+from encrypticoin_ssi.client import ServerIntegrationClient
 from encrypticoin_ssi.message import ProofMessageFactory
 
 
@@ -43,3 +46,16 @@ def test_message_factory():
     assert pmf.extract_id(msg) == "id"
     assert pmf.extract_id("asd") is None
     assert pmf.extract_id("asd\nId: id") is None
+
+
+@pytest.mark.asyncio
+async def test_contract_info():
+    tia = ServerIntegrationClient()
+    await tia.setup()
+    try:
+        info = await tia.contract_info()
+        assert set(info.keys()) == {"contract_address", "block_number"}
+        assert isinstance(info["contract_address"], str)
+        assert isinstance(info["block_number"], int)
+    finally:
+        await tia.close()

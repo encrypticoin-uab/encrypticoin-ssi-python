@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Tuple, Dict, Any
 
 import aiohttp
 
@@ -83,3 +83,17 @@ class ServerIntegrationClient:
             except (AttributeError, TypeError, ValueError):
                 raise IntegrationError()
             return changes
+
+    async def contract_info(self) -> Dict[str, Any]:
+        """
+        Get some info about the contract. The returned keys are currently `contract_address` and `block_number`.
+        """
+        async with self.session.get(self.url_base + "/contract-info") as r:
+            if r.status == 429:
+                raise BackoffError()
+            elif r.status != 200:
+                raise IntegrationError()
+            try:
+                return await r.json()
+            except (TypeError, ValueError):
+                raise IntegrationError()
