@@ -86,7 +86,8 @@ class ServerIntegrationClient:
 
     async def contract_info(self) -> Dict[str, Any]:
         """
-        Get some info about the contract. The returned keys are currently `contract_address` and `block_number`.
+        Get some info about the contract.
+        The returned keys are currently `contract_address`, `block_number` and `decimals`.
         """
         async with self.session.get(self.url_base + "/contract-info") as r:
             if r.status == 429:

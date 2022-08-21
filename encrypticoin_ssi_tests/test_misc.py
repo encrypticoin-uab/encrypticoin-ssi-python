@@ -54,8 +54,9 @@ async def test_contract_info():
     await tia.setup()
     try:
         info = await tia.contract_info()
-        assert set(info.keys()) == {"contract_address", "block_number"}
+        assert set(info.keys()) == {"contract_address", "block_number", "decimals"}
         assert isinstance(info["contract_address"], str)
         assert isinstance(info["block_number"], int)
+        assert info["decimals"] == 18
     finally:
         await tia.close()

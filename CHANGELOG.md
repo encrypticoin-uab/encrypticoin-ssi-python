@@ -1,5 +1,8 @@
 # encrypticoin_ssi
 
+## 0.2.1
+- Update contract-info API docstring and test (decimals added)
+
 ## 0.2.0
 - Add contract-info API call
 
