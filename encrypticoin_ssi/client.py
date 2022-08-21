@@ -14,9 +14,17 @@ class ServerIntegrationClient:
 
     __slots__ = ("session", "url_base")
 
-    def __init__(self, session: aiohttp.ClientSession, domain: str = "etalon.cash", api_path: str = "/tia"):
+    def __init__(self, session: aiohttp.ClientSession = None, domain: str = "etalon.cash", api_path: str = "/tia"):
         self.session = session
         self.url_base = "https://%s%s" % (domain, api_path)
+
+    async def setup(self):
+        if self.session is None:
+            self.session = aiohttp.ClientSession()
+
+    async def close(self):
+        await self.session.close()
+        self.session = None
 
     async def wallet_by_signed(self, message: str, signature: str) -> str:
         """

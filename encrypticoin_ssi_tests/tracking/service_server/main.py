@@ -15,15 +15,15 @@ from encrypticoin_ssi.client import ServerIntegrationClient
 from encrypticoin_ssi.error import BackoffError, IntegrationError, SignatureValidationError
 from encrypticoin_ssi.message import ProofMessageFactory
 
-tia: ServerIntegrationClient = None
+tia = ServerIntegrationClient()
 msg_factory = ProofMessageFactory("Wallet ownership proof for token attribution at TrackingTest web-shop.")
 collector_task: asyncio.Task = None
 wallet_balances = dict()
 
 
 async def _on_startup():
-    global tia, collector_task
-    tia = ServerIntegrationClient(aiohttp.ClientSession())
+    global collector_task
+    await tia.setup()
     collector_task = asyncio.create_task(_collector())
 
 
@@ -33,7 +33,7 @@ async def _on_shutdown():
         await collector_task
     except asyncio.CancelledError:
         pass
-    await tia.session.close()
+    await tia.close()
 
 
 async def _collector():

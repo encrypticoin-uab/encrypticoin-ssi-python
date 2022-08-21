@@ -14,17 +14,16 @@ from encrypticoin_ssi.client import ServerIntegrationClient
 from encrypticoin_ssi.error import SignatureValidationError, IntegrationError
 from encrypticoin_ssi.message import ProofMessageFactory
 
-tia: ServerIntegrationClient = None
+tia = ServerIntegrationClient()
 msg_factory = ProofMessageFactory("Wallet ownership proof for token attribution at SimpleTest web-shop.")
 
 
 async def _on_startup():
-    global tia
-    tia = ServerIntegrationClient(aiohttp.ClientSession())
+    await tia.setup()
 
 
 async def _on_shutdown():
-    await tia.session.close()
+    await tia.close()
 
 
 def wallet_challenge(request: Request):
