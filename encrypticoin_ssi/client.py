@@ -1,4 +1,4 @@
-from typing import List, Tuple, Dict, Any
+from typing import List, Dict, Any, Optional
 
 import aiohttp
 
@@ -12,15 +12,22 @@ class ServerIntegrationClient:
     Lightweight client to the integration REST API.
     """
 
-    __slots__ = ("session", "url_base")
+    __slots__ = ("session", "proxy_address", "url_base")
 
     @classmethod
     def create_url_base(cls, domain: str = "etalon.cash", api_path: str = "/tia"):
         return "https://%s%s" % (domain, api_path)
 
-    def __init__(self, session: aiohttp.ClientSession = None, domain: str = "etalon.cash", api_path: str = "/tia"):
+    def __init__(
+        self,
+        session: aiohttp.ClientSession = None,
+        domain: str = "etalon.cash",
+        api_path: str = "/tia",
+        proxy_address: Optional[str] = None,
+    ):
         self.session = session
         self.url_base = self.create_url_base(domain, api_path)
+        self.proxy_address = proxy_address
 
     async def setup(self, session: aiohttp.ClientSession = None):
         if self.session is None:
@@ -38,7 +45,9 @@ class ServerIntegrationClient:
         The recovered address (if successfully retrieved) is in checksum format.
         """
         async with self.session.post(
-            self.url_base + "/wallet-by-signed", json={"message": message, "signature": signature}
+            self.url_base + "/wallet-by-signed",
+            json={"message": message, "signature": signature},
+            proxy=self.proxy_address,
         ) as r:
             if r.status == 429:
                 raise BackoffError()
@@ -59,7 +68,9 @@ class ServerIntegrationClient:
         Get the balance of tokens in the crypto-wallet by address.
         The address value is case-sensitive, it must be in proper checksum format.
         """
-        async with self.session.post(self.url_base + "/token-balance", json={"address": address}) as r:
+        async with self.session.post(
+            self.url_base + "/token-balance", json={"address": address}, proxy=self.proxy_address
+        ) as r:
             if r.status == 429:
                 raise BackoffError()
             elif r.status != 200:
@@ -75,7 +86,9 @@ class ServerIntegrationClient:
         Get the token balance changes from the `since` number.
         The next query shall be made with `changes[-1].id + 1`, or repeated with `since` if no changes were retrieved.
         """
-        async with self.session.post(self.url_base + "/token-changes", json={"since": since}) as r:
+        async with self.session.post(
+            self.url_base + "/token-changes", json={"since": since}, proxy=self.proxy_address
+        ) as r:
             if r.status == 429:
                 raise BackoffError()
             elif r.status != 200:
@@ -95,7 +108,7 @@ class ServerIntegrationClient:
         Get some info about the contract.
         The returned keys are currently `contract_address`, `block_number` and `decimals`.
         """
-        async with self.session.get(self.url_base + "/contract-info") as r:
+        async with self.session.get(self.url_base + "/contract-info", proxy=self.proxy_address) as r:
             if r.status == 429:
                 raise BackoffError()
             elif r.status != 200:

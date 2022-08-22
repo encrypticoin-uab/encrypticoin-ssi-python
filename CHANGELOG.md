@@ -1,5 +1,8 @@
 # encrypticoin_ssi
 
+## 0.2.4
+- Add proxy support for the requests
+
 ## 0.2.3
 - Provide url_base construction client API
 
