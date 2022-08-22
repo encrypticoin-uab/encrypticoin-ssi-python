@@ -1,5 +1,8 @@
 # encrypticoin_ssi
 
+## 0.2.2
+- Allow further customization during setup
+
 ## 0.2.1
 - Update contract-info API docstring and test (decimals added)
 

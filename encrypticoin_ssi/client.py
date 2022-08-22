@@ -18,9 +18,11 @@ class ServerIntegrationClient:
         self.session = session
         self.url_base = "https://%s%s" % (domain, api_path)
 
-    async def setup(self):
+    async def setup(self, session: aiohttp.ClientSession = None):
         if self.session is None:
-            self.session = aiohttp.ClientSession()
+            if session is None:
+                session = aiohttp.ClientSession()
+            self.session = session
 
     async def close(self):
         await self.session.close()
