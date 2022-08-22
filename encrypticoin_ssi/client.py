@@ -14,9 +14,13 @@ class ServerIntegrationClient:
 
     __slots__ = ("session", "url_base")
 
+    @classmethod
+    def create_url_base(cls, domain: str = "etalon.cash", api_path: str = "/tia"):
+        return "https://%s%s" % (domain, api_path)
+
     def __init__(self, session: aiohttp.ClientSession = None, domain: str = "etalon.cash", api_path: str = "/tia"):
         self.session = session
-        self.url_base = "https://%s%s" % (domain, api_path)
+        self.url_base = self.create_url_base(domain, api_path)
 
     async def setup(self, session: aiohttp.ClientSession = None):
         if self.session is None:

@@ -1,5 +1,8 @@
 # encrypticoin_ssi
 
+## 0.2.3
+- Provide url_base construction client API
+
 ## 0.2.2
 - Allow further customization during setup
 
