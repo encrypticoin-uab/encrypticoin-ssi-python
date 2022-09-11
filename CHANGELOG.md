@@ -1,5 +1,8 @@
 # encrypticoin_ssi
 
+## 0.3.0
+- Exclude testing files from sdist
+
 ## 0.2.5
 - Change the message id-extraction implementation
 
