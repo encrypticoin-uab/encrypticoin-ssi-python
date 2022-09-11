@@ -34,6 +34,7 @@ setup(
     version=VERSION,
     description="Service-Server-Integration library for Etalon Token Integration API",
     long_description=long_description,
+    long_description_content_type="text/markdown",
     url="https://github.com/encrypticoin-uab/encrypticoin-ssi-python",
     author="Nándor Mátravölgyi",
     author_email="dev@etalon.cash",

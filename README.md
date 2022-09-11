@@ -1,17 +1,14 @@
-encrypticoin-ssi
-=====
+# encrypticoin-ssi
 
 Service-Server-Integration library written in Python for use with the Etalon Token-Integration-API.
 
 The API is made to be as simple as possible, so integration from any environment would be cheap and easy. This repository demonstrates the integration procedure for both "simple" and "tracking" workflows using a tiny mocked service-server and service-client.
 
-Compatibility
------
+## Compatibility
 
 The library is tested with CPython 3.8, 3.9 and 3.10. It should work with PyPy3 as well, but there is a dependency needed for running the tests that is not available for it.
 
-Usage
------
+## Usage
 
 The main feature of the library is the `ServerIntegrationClient` class. It implements a lightweight wrapper to the integration REST API using `aiohttp`.
 
@@ -27,13 +24,11 @@ The `encrypticoin_ssi_tests/tracking` directory holds the example/test of the tr
 - `service_client.py` implements a mock client that communicates with the service-server
 - `test_workflow.py` takes all of them and performs a basic test procedure
 
-Server API
------
+## Server API
 
 The live server-API documentation is available at https://etalon.cash/tia/docs
 
-Install
------
+## Install
 
 A source distribution package is available from PyPI named `encrypticoin-ssi`:
 

@@ -1,5 +1,8 @@
 # encrypticoin_ssi
 
+## 0.3.2
+- Fix PyPI packaging issues
+
 ## 0.3.1
 - Update package metadata
 
