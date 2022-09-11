@@ -32,6 +32,6 @@ class ProofMessageFactory:
         """
         Try to recover the `message_id` from a message.
         """
-        description, _, last_line = maybe_message.rpartition("\n")
-        if description == self.description and last_line.startswith("Id: "):
-            return last_line[4:]
+        id_prefix = "%s\nId: " % (self.description,)
+        if maybe_message.startswith(id_prefix):
+            return maybe_message[len(id_prefix) :]
