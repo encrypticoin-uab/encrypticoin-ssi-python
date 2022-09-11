@@ -1,5 +1,8 @@
 # encrypticoin_ssi
 
+## 0.3.1
+- Update package metadata
+
 ## 0.3.0
 - Exclude testing files from sdist
 

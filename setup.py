@@ -32,9 +32,9 @@ for p in [os.path.join(HERE, "build"), os.path.join(HERE, "dist"), os.path.join(
 setup(
     name="encrypticoin-ssi",
     version=VERSION,
-    description="Service-Server-Integration for Encrypticoin Token Integration API",
+    description="Service-Server-Integration library for Etalon Token Integration API",
     long_description=long_description,
-    url="etalon.cash",
+    url="https://github.com/encrypticoin-uab/encrypticoin-ssi-python",
     author="Nándor Mátravölgyi",
     author_email="dev@etalon.cash",
     license="Apache 2.0",
