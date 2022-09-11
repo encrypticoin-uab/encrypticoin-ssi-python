@@ -30,6 +30,9 @@ class ServerIntegrationClient:
         self.proxy_address = proxy_address
 
     async def setup(self, session: aiohttp.ClientSession = None):
+        """
+        A customized session may be provided for use.
+        """
         if self.session is None:
             if session is None:
                 session = aiohttp.ClientSession()

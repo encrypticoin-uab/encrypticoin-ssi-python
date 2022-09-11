@@ -1,5 +1,8 @@
 # encrypticoin_ssi
 
+## 0.2.5
+- Change the message id-extraction implementation
+
 ## 0.2.4
 - Add proxy support for the requests
 
