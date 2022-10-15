@@ -1,5 +1,9 @@
 # encrypticoin_ssi
 
+## 1.0.0
+- Improved documentation
+- Added `has_attribution()` to `TokenBalance` for convenience
+
 ## 0.3.2
 - Fix PyPI packaging issues
 

@@ -87,6 +87,7 @@ class ServerIntegrationClient:
     async def token_changes(self, since: int) -> List[TokenBalanceChange]:
         """
         Get the token balance changes from the `since` number.
+        Call this periodically (every 10-20 seconds) to get the changes incrementally.
         The next query shall be made with `changes[-1].id + 1`, or repeated with `since` if no changes were retrieved.
         """
         async with self.session.post(

@@ -9,6 +9,12 @@ class TokenBalance:
         self.balance = balance
         self.decimals = decimals
 
+    def has_attribution(self) -> bool:
+        """
+        Whether the wallet has enough tokens for attribution or not.
+        """
+        return bool(self.as_integer())
+
     def as_integer(self) -> int:
         """
         Balance of "whole" tokens.
