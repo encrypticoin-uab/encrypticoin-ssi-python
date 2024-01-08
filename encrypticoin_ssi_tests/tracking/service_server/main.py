@@ -12,7 +12,7 @@ from starlette.responses import JSONResponse
 from starlette.routing import Route
 
 from encrypticoin_ssi.client import ServerIntegrationClient
-from encrypticoin_ssi.error import BackoffError, IntegrationError, SignatureValidationError
+from encrypticoin_ssi.error import BackoffError, IntegrationError, SignatureValidationError, TrackingSessionReset
 from encrypticoin_ssi.message import ProofMessageFactory
 
 tia = ServerIntegrationClient()
@@ -45,11 +45,17 @@ async def _collector():
     instance. The collection index (since) and the wallet balance changes should be persisted in a database.
     """
     since = 0
+    session = None
     while True:
         try:
-            changes = await tia.token_changes(since)
+            changes = await tia.token_changes(since, session)
         except BackoffError:
             await asyncio.sleep(5)
+            continue
+        except TrackingSessionReset as e:  # Change tracking stream reset.
+            wallet_balances.clear()
+            since = 0
+            session = e.new_session
             continue
         except (IntegrationError, aiohttp.ClientError):
             # NOTE: depending on implementation general and unknown errors may abort the collector process
@@ -64,6 +70,7 @@ async def _collector():
             # services will adapt to the new state: granting or revoking attribution to an account for example.
             wallet_balances[change.address] = change
             since = change.id + 1
+            # NOTE: The `session` has to be saved as well with the `since` to continue later.
 
 
 def wallet_challenge(request: Request):

@@ -4,7 +4,7 @@ import aiohttp
 
 from encrypticoin_ssi.balance import TokenBalance
 from encrypticoin_ssi.balance_change import TokenBalanceChange
-from encrypticoin_ssi.error import BackoffError, SignatureValidationError, IntegrationError
+from encrypticoin_ssi.error import BackoffError, SignatureValidationError, IntegrationError, TrackingSessionReset
 
 
 class ServerIntegrationClient:
@@ -84,11 +84,12 @@ class ServerIntegrationClient:
             except (AttributeError, TypeError, ValueError):
                 raise IntegrationError()
 
-    async def token_changes(self, since: int) -> List[TokenBalanceChange]:
+    async def token_changes(self, since: int, session: Optional[int] = None) -> List[TokenBalanceChange]:
         """
-        Get the token balance changes from the `since` number.
+        Get the token balance changes from the `since` number, in consistency with the used `session`.
         Call this periodically (every 10-20 seconds) to get the changes incrementally.
         The next query shall be made with `changes[-1].id + 1`, or repeated with `since` if no changes were retrieved.
+        If the session is interrupted, `TrackingSessionReset` will be raised and the tracking needs to be re-initialized.
         """
         async with self.session.post(
             self.url_base + "/token-changes", json={"since": since}, proxy=self.proxy_address
@@ -101,6 +102,9 @@ class ServerIntegrationClient:
             try:
                 result = await r.json()
                 decimals = int(result["decimals"])
+                remote_session = result.get("session")
+                if session != remote_session:
+                    raise TrackingSessionReset(session, int(remote_session))
                 for change in result["changes"]:
                     changes.append(TokenBalanceChange(change["id"], change["address"], change["balance"], decimals))
             except (AttributeError, TypeError, ValueError):
